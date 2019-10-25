@@ -17,10 +17,12 @@ module Toll
       def authenticate_with_token
         authenticate_with_http_token do |token, options|
 
-          user = User.find_by(authentication_keys(options))
+          ActsAsTenant.without_tenant do
+            user = User.find_by(authentication_keys(options).merge({Toll.authentication_token_attribute_name => token}))
 
-          if user && secure_token_compare(user.send(Toll.authentication_token_attribute_name), token)
-            @current_user = user
+            if user && secure_token_compare(user.send(Toll.authentication_token_attribute_name), token)
+              @current_user = user
+            end
           end
         end
       end
