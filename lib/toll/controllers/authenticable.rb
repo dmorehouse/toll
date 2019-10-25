@@ -26,7 +26,7 @@ module Toll
       end
 
       def current_user
-        @current_user
+        @current_user ||= authenticate_with_token
       end
 
       def authenticated?
