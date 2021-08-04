@@ -43,7 +43,7 @@ module Toll
         def generate_authentication_token!
           begin
             self.send("#{Toll.authentication_token_attribute_name}=", Toll.token)
-          end while self.class.exists?(Toll.authentication_token_attribute_name => self.send(Toll.authentication_token_attribute_name))
+          end while self.class.default_scoped.exists?(Toll.authentication_token_attribute_name => self.send(Toll.authentication_token_attribute_name))
         end
 
         def ensure_authentication_token!
